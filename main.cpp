@@ -1,3 +1,11 @@
+#include <iostream>
+#include <stdlib.h>
+#include <string.h>
+#include <fstream>
+#include <cstdlib>
+#include "cab7.h"
+
+
 using namespace std;
 
 int main()
