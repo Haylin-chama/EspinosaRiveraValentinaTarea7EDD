@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <locale>
+#include <fstream>
 #include <stdlib.h>
 #include "cab7.h"
 
@@ -9,30 +10,30 @@ using namespace std;
 int Validar()
 {
     locale loc;
-    string str;
-    getline(cin,str);
+    char str[256];
+    fgets(str,256,stdin);
     if (isdigit(str[0],loc))
     {
-        return 0;
+        int i=atoi(str);
+        return i;
     }
-    cout<<"Caracter ingresado no valido. Ingrese un numero.\n";
+    else{
+        cout<<"Caracter ingresado no valido. Ingrese un numero.\n";
+    }
     Validar();
 }
 
 //a) Generar los N caballeros de la mesa redonda
-void Agregar(Lista &C)
+void Agregar(Lista &C, int e)
 {
-    int e;
-    cout <<"Numero de caballeros en la mesa: "<<endl;
-    cin>>e;
     Lista p;
     for (int i=0;i<e;i++){
         p = new Mesa;
         cout<<"Nombre del caballero: ";
         getline(cin,p->nombre);
-        cout<<"\nTitulo Nobiliario: ";
+        cout<<"Titulo Nobiliario: ";
         getline(cin,p->titulo);
-        cout<<"\n Años de Experiencia: ";
+        cout<<"Años de Experiencia: ";
         cin>>p->exp;
         p->ant = p;
         p->sig = p;
@@ -51,8 +52,26 @@ void Agregar(Lista &C)
 }
 
 //b) Mostrar toda la información contenida en la mesa redonda
-void Listar(Lista C){
-    Lista p;
+void Listar(Lista C, Lista p){
+    if(C!=NULL){
+        if (p==C)
+        {
+            cout<<"\n\nNombre: "<<p->nombre;
+            cout<<"\nTitulo Nobiliario: "<<p->titulo;
+            cout<<"\nAños de Experiencia: "<<p->exp;
+        }
+        else
+            cout<<"\n\nNombre: "<<p->nombre;
+            cout<<"\nTitulo Nobiliario: "<<p->titulo;
+            cout<<"\nAños de Experiencia: "<<p->exp;
+            return Listar(C,p->sig);
+    }
+    else{
+        cout<<"No hay caballeros presentes\n";
+    }
+}
+
+void Listar2(Lista C, Lista p){
     cout << endl << "Caballeros de la mesa redonda " << endl;
     if(C!=NULL){
         p = C;
@@ -118,7 +137,9 @@ void Elegido(Lista &Mesa, int n)
     Welta(Mesa,i,k,p,q,r);
     Eliminar(Mesa,k,p,q,r);
   }
-  cout<<"\n\nCaballero Elegido: "<<Listar(Mesa);
+  cout<<"\n\nCaballero Elegido: ";
+  p=Mesa;
+  Listar(Mesa,p);
 }
 
 //d) Salir
