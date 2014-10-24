@@ -4,6 +4,7 @@
 
 using namespace std;
 
+//Mesa Redonda
 typedef struct Mesa{
     string nombre;
     string titulo;
@@ -14,8 +15,11 @@ typedef struct Mesa{
 
 typedef Mesa *Lista;
 
-void Agregar(Lista &);
-void Listar(Lista );
+//Operaciones
+int Validar();
+void Agregar(Lista &, int);
+void Listar(Lista,Lista);
+void Listar2(Lista,Lista);
 void Eliminar(Lista &, int , Lista &, Lista &, Lista &);
 void Welta(Lista &,int ,int , Lista &, Lista &, Lista &);
 void Elegido(Lista &, int );
