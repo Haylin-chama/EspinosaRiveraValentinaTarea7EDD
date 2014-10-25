@@ -9,9 +9,10 @@ using namespace std;
 
 int Validar()
 {
+    fflush(stdin);
     char str[256];
+    cout<<"Valor: ";
     fgets(str,256,stdin);
-    system("cls");
     if (isdigit(str[0]))
     {
         int i=atoi(str);
@@ -27,18 +28,16 @@ int Validar()
 void Agregar(Lista &C, int e)
 {
     Lista p;
+    string str;
     for (int i=0;i<e;i++){
         p = new Mesa;
         cout<<"Numero de Caballero: ";
-        cin>>p->id;
+        p->id=Validar();
         cout<<"Nombre del caballero: ";
-        getline(cin,p->nombre);
-        cout<<"Titulo Nobiliario: ";
-        getline(cin,p->titulo);
-        cout<<"Provincia de nacimiento: ";
-        getline(cin,p->region);
+        cin>>str;
+        p->nombre=str;
         cout<<"Años de Experiencia: ";
-        cin>>p->exp;
+        p->exp=Validar();
         p->ant = p;
         p->sig = p;
 
@@ -52,7 +51,9 @@ void Agregar(Lista &C, int e)
             C ->sig = p;
 
         }
+        cout<<endl;
     }
+    cout<<endl;
 }
 
 //b) Mostrar toda la información contenida en la mesa redonda
@@ -62,13 +63,13 @@ void Listar(Lista C, Lista p){
         {
             cout<<"\n\nNumero de Caballero: "<<p->id;
             cout<<"nNombre: "<<p->nombre;
-            cout<<"\nTitulo Nobiliario: "<<p->titulo;
             cout<<"\nAños de Experiencia: "<<p->exp;
         }
         else
+            cout<<"\n\nNumero de Caballero: "<<p->id;
             cout<<"\n\nNombre: "<<p->nombre;
-            cout<<"\nTitulo Nobiliario: "<<p->titulo;
             cout<<"\nAños de Experiencia: "<<p->exp;
+            cout<<endl;
             return Listar(C,p->sig);
     }
     else{
@@ -80,22 +81,63 @@ void Listar2(Lista C, Lista p){
     cout << endl << "Caballeros de la mesa redonda " << endl;
     if(C!=NULL){
         p = C;
-        cout<<"\n\nNombre: "<<p->nombre;
-        cout<<"\nTitulo Nobiliario: "<<p->titulo;
+        cout<<"\n\nNumero de Caballero: "<<p->id;
+        cout<<"\nNombre: "<<p->nombre;
         cout<<"\nAños de Experiencia: "<<p->exp;
+        cout<<endl;
         p = p->sig;
         while(p != C){
-            cout<<"\n\nNombre: "<<p->nombre;
-            cout<<"\nTitulo Nobiliario: "<<p->titulo;
+            cout<<"\n\nNumero de Caballero: "<<p->id;
+            cout<<"\nNombre: "<<p->nombre;
             cout<<"\nAños de Experiencia: "<<p->exp;
+            cout<<endl;
             p = p->sig;
         }
     }
 }
 
 //c) Solicitar el valor de K, y elegir el nombre del caballero elegido
-void Eliminar(Lista &Mesa_s, int k, Lista &p, Lista &q, Lista &r)
+
+void Welta(Lista &Mesa,int i,int k, Lista &p, Lista &q, Lista &r)
 {
+  if (k==0)
+    if (i=0){
+            cout<<"k: "<<k;
+
+        q->sig=p->sig;
+        r->ant=p->ant;
+        delete p;
+        p=Mesa;
+    system("pause");
+    }
+  if (k<0){
+    cout<<"\nk: "<<k;
+    system("pause");
+    return Welta(Mesa,i,k+1,p->ant,p->sig,p->ant);
+  }
+  if (k>0){
+    cout<<"\nk: "<<k;
+    system("pause");
+    return Welta(Mesa,i,k-1,p->sig,p->ant,p->sig);
+  }
+}
+
+void Elegido(Lista &Mesa, int n)
+{
+  if (Mesa!=NULL)
+  {
+    int k;
+  cout<<"Valor de k: "<<endl; //Se ingresa k
+  k=Validar();
+  Lista p=Mesa,q=p->ant,r=p->sig;
+  //Paso 1 (con n caballeros): se avanza k posiciones, y se elimina el caballero en posición k
+  int i=0;
+  Welta(Mesa,i,k,p,q,r);
+  cout<<"Aprobada primera welta\n";
+  //Paso 2 (con n-1 caballeros): se avanza k posiciones y se elimina el próximo caballero (k+1 o k-1)
+  for (i=1;i<n;i++)
+  {
+    Welta(Mesa,i,k,p,q,r);
     if (k>0)
     {
         q->sig=p->sig->sig;
@@ -110,41 +152,13 @@ void Eliminar(Lista &Mesa_s, int k, Lista &p, Lista &q, Lista &r)
         delete p->ant;
         p=r;
     }
-}
-
-void Welta(Lista &Mesa,int i,int k, Lista &p, Lista &q, Lista &r)
-{
-  if (k==0)
-    if (i=0){
-        q->sig=p->sig;
-        r->ant=p->ant;
-        delete p;
-        p=Mesa;
-    }
-  if (k<0)
-    return Welta(Mesa,i,k+1,p->ant,p->sig,p->ant);
-  if (k>0)
-    return Welta(Mesa,i,k-1,p->sig,p->ant,p->sig);
-}
-
-void Elegido(Lista &Mesa, int n)
-{
-  int k;
-  cout<<"Ingrese k: "<<endl; //Se ingresa k
-  cin>>k;
-  Lista p=Mesa,q=p->ant,r=p->sig;
-  //Paso 1 (con n caballeros): se avanza k posiciones, y se elimina el caballero en posición k
-  int i=0;
-  Welta(Mesa,i,k,p,q,r);
-  //Paso 2 (con n-1 caballeros): se avanza k posiciones y se elimina el próximo caballero (k+1 o k-1)
-  for (i=1;i<n;i++)
-  {
-    Welta(Mesa,i,k,p,q,r);
-    Eliminar(Mesa,k,p,q,r);
   }
   cout<<"\n\nCaballero Elegido: ";
   p=Mesa;
   Listar(Mesa,p);
+  }
+  else
+    cout<<"No hay Caballeros que sortear.\n";
 }
 
 //d) Salir
