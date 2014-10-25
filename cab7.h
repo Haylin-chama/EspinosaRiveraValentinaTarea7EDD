@@ -1,6 +1,7 @@
 #ifndef CAB7_H_INCLUDED
 #define CAB7_H_INCLUDED
 #include <iostream>
+#include <fstream>
 
 using namespace std;
 
@@ -8,8 +9,6 @@ using namespace std;
 typedef struct Mesa{
     int id;
     string nombre;
-    string titulo;
-    string region;
     int exp;
     struct Mesa *ant;
     struct Mesa *sig;
